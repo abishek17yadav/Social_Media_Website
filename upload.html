@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media Page</title>
+    <!-- <link rel="stylesheet" href=""> -->
+    <script src="cret.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(45deg, #2d0101, #d6dbe2f1);
+            
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .post-container {
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+
+        .post {
+            padding: 10px;
+        }
+
+        .post img {
+            width: 100%;
+            height: auto;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .like-btn {
+            padding: 5px;
+            border: none;
+            cursor: pointer;
+            color: #ccc;
+            transition: color 0.3s;
+        }
+
+        .like-btn.liked {
+            color: red;
+        }
+
+        .comment-btn {
+            padding: 5px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .comments {
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Start uploading now</h1>
+        <div id="postContainer"></div>
+        <div class="post-form">
+            <input type="file" id="imageInput" accept="image/*">
+            <button onclick="addPost()">Post</button>
+        </div>
+    </div>
+
+    <script>
+        function addPost() {
+            var imageInput = document.getElementById('imageInput');
+            var postContainer = document.getElementById('postContainer');
+
+            var file = imageInput.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    var imgSrc = e.target.result;
+                    var postDiv = document.createElement('div');
+                    postDiv.classList.add('post-container');
+                    postDiv.innerHTML = `
+                        <div class="post">
+                            <img src="${imgSrc}" alt="Posted Image">
+                            <div class="post-actions">
+                                <button class="like-btn" onclick="toggleLike(this)">Like</button>
+                                <button class="comment-btn" onclick="commentPost(this)">Comment</button>
+                            </div>
+                            <div class="comments"></div>
+                        </div>
+                    `;
+                    postContainer.insertBefore(postDiv, postContainer.firstChild);
+                }
+                reader.readAsDataURL(file);
+            } else {
+                alert('Please select an image to post.');
+            }
+        }
+
+        function toggleLike(btn) {
+            btn.classList.toggle('liked');
+        }
+
+        function commentPost(btn) {
+            var commentDiv = document.createElement('div');
+            commentDiv.innerText = prompt('Enter your comment:');
+            if (commentDiv.innerText !== null && commentDiv.innerText !== '') {
+                btn.parentElement.nextElementSibling.appendChild(commentDiv);
+            }
+        }
+    </script>
+</body>
+</html>
